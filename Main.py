@@ -34,17 +34,20 @@ def main():
             word = wordTagPair.split("/")
             currentState = word[1]
 
-            ###  State Model Building Part  ###
+             ###  State Model Building Part  ###
             if previousState == '':
                 previousState = currentState
             else:
                 if previousState in stateDictionary.keys():
                     if currentState in stateDictionary[previousState]:
+                        stateDictionary[previousState]["totalValueOfTheState"] += 1
                         stateDictionary[previousState][currentState] += 1
                     else:
+                        stateDictionary[previousState]["totalValueOfTheState"] += 1
                         stateDictionary[previousState][currentState] = 1
                 else:
                     stateDictionary[previousState] = {}
+                    stateDictionary[previousState]["totalValueOfTheState"] = 1
                     stateDictionary[previousState][currentState] = 1
             ###  State Model Building Part  ###
 
@@ -53,30 +56,51 @@ def main():
 
             if currentState in tagWordDictionary.keys():
                 if currentWord in tagWordDictionary[currentState]:
+                    tagWordDictionary[currentState]["totalValueOfTheState"] += 1
                     tagWordDictionary[currentState][currentWord] += 1
                 else:
+                    tagWordDictionary[currentState]["totalValueOfTheState"] += 1
                     tagWordDictionary[currentState][currentWord] = 1
             else:
                 tagWordDictionary[currentState] = {}
+                tagWordDictionary[currentState]["totalValueOfTheState"] = 1
                 tagWordDictionary[currentState][currentWord] = 1
             ###  Tag-Word Dictionary Building Part  ###
 
             previousState = currentState
+    ###  End of the reading of the file  ###
 
-            ###  State Model Dictionary Possibilities Calculating Part  ###
-            # bu kısımda hata var buraya bak
-            for key in stateDictionary:
-                totalValueOfTheState = 0
-                for state2 in stateDictionary[key]:
-                    totalValueOfTheState += 1
-                for state2 in stateDictionary[key]:
-                    statePossibilitiesDictionary[key][state2] = stateDictionary[key][state2] / totalValueOfTheState
-            ###  State Model Dictionary Possibilities Calculating Part  ###
+    ###  State Model Dictionary Possibilities Calculating Part  ###
+    for key in stateDictionary:
+        statePossibilitiesDictionary[key] = {}
+        for crt in stateDictionary[key]:
+            if crt != "totalValueOfTheState":
+                statePossibilitiesDictionary[key][crt] = stateDictionary[key][crt] / stateDictionary[key]["totalValueOfTheState"]
+    ###  State Model Dictionary Possibilities Calculating Part  ###
 
-            print(statePossibilitiesDictionary)
 
-#    print(stateDictionary)
-#    print(tagWordDictionary)
+    ###  Tag-Word Model Dictionary Possibilities Calculating Part  ###
+    for key in tagWordDictionary:
+        tagWordPossibilitiesDictionary[key] = {}
+        for wrd in tagWordDictionary[key]:
+            if wrd != "totalValueOfTheState":
+                tagWordPossibilitiesDictionary[key][wrd] = tagWordDictionary[key][wrd] / tagWordDictionary[key]["totalValueOfTheState"]
+    ###  Tag-Word Model Dictionary Possibilities Calculating Part  ###
+
+    ###  State Model Dictionary Possibilities (Transition Probability) Printing  ###
+    for key in statePossibilitiesDictionary:
+        print(key)
+        print(statePossibilitiesDictionary[key])
+    ###  State Model Dictionary Possibilities (Transition Probability) Printing  ###
+
+    ###  Tag-Word Dictionary Possibilities (Emission Probability) Printing  ###
+    # for key in tagWordDictionary:
+    #     print(key)
+    #     print(tagWordPossibilitiesDictionary[key])
+    ###  Tag-Word Dictionary Possibilities (Emission Probability) Printing  ###
+
+    # print(stateDictionary)
+    # print(tagWordDictionary)
 
 
             # print(wordTagPair)

@@ -7,13 +7,13 @@ tagWordDictionary = {}
 statePossibilitiesDictionary = {}
 tagWordPossibilitiesDictionary = {}
 
-testSetTotalTagCount = 0
-testSetTotalTrueTaggingCounter = 0
 
 def main():
     vocabularySize = 0
     tagWordVocabularySize = 0
     non_blank_count = 0
+    testSetTotalTagCount = 0
+    testSetTotalTrueTaggingCounter = 0
 
     with open('metu.txt', encoding="utf8") as f:
         for line in f:
@@ -121,6 +121,7 @@ def main():
             word = words[k].split("/")
             matrix[0][k+1] = word[0]
             trueTags.append(word[1])
+            testSetTotalTagCount += 1
 
         ## For initial probabilities, building first column of the matrix ##
         # for k in range(1, stateDictionaryKeyCount):
@@ -199,23 +200,21 @@ def main():
         for i in range(len(words)-1, 1, -1):
             index = tempList.index(path[0]) + 1
             path.insert(0, matrix[index][i][1])
-            print(path)
-        # ayrı bir kod önceden yorum satırındydı açma
-        # while camePath[0] != 'Start':
-        #     for i in range(1,stateDictionaryKeyCount):
-        #         if == matrix[i][0]:
-        #             path.insert(0, matrix[i][j][1])
+        # print(path)
 
         # burayı aç!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        print(np.matrix(matrix))
+        # print(np.matrix(matrix))
         # print(stateDictionary)
 
-        print()
+        for i in range(0,len(path)-1):
+            if path[i] == trueTags[i]:
+                testSetTotalTrueTaggingCounter += 1
+
     ###  TASK II  ###
 
 
     ###  TASK III  ###
-
+    print(testSetTotalTrueTaggingCounter/testSetTotalTagCount, testSetTotalTrueTaggingCounter, testSetTotalTagCount)
     ###  TASK III  ###
 
     ###  State Model Dictionary Possibilities (Transition Probability) Printing  ###

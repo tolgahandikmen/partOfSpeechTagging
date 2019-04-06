@@ -253,3 +253,6 @@ def main():
             # print(wordTagPair)
 
 main()
+
+
+https://www.csd.uwo.ca/courses/CS4442b/L9-NLP-LangModels.pdf
